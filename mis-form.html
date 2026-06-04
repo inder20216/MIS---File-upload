@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIS Report Submission | Open Mind Services</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: Georgia, serif;
+    background: #fff;
+    color: #111;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 620px;
+    margin: 48px auto;
+    padding: 0 24px 64px;
+  }
+
+  .header {
+    border-bottom: 2px solid #111;
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+
+  .header h1 {
+    font-size: 22px;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+
+  .header p {
+    font-size: 13px;
+    color: #555;
+    margin-top: 4px;
+  }
+
+  /* Instructions */
+  .instructions {
+    border: 1px solid #ccc;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    background: #fafafa;
+  }
+
+  .instructions h2 {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .instructions ol {
+    padding-left: 20px;
+  }
+
+  .instructions ol li {
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 6px;
+  }
+
+  .instructions ol li strong {
+    color: #111;
+  }
+
+  .file-names {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #ddd;
+    font-size: 13px;
+    color: #333;
+  }
+
+  .file-names p {
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+
+  .file-names code {
+    display: block;
+    font-family: monospace;
+    font-size: 12px;
+    color: #333;
+    padding: 3px 0;
+  }
+
+  /* Name field */
+  .field {
+    margin-bottom: 28px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .field input[type="text"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #999;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .field input[type="text"]:focus {
+    border-color: #111;
+  }
+
+  /* Steps */
+  .steps-title {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+  }
+
+  .step {
+    margin-bottom: 24px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    position: relative;
+  }
+
+  .step.locked {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .step.done {
+    border-color: #111;
+    background: #f5f5f5;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .step-num {
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #555;
+    min-width: 60px;
+  }
+
+  .step-title {
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .step-status {
+    margin-left: auto;
+    font-size: 12px;
+    color: #555;
+  }
+
+  .step-status.done-text {
+    font-weight: bold;
+    color: #111;
+  }
+
+  .step-hint {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  .file-upload-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .file-input-wrap {
+    flex: 1;
+    border: 1px solid #999;
+    padding: 6px 10px;
+    font-size: 13px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: #fff;
+  }
+
+  .file-input-wrap input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .file-input-label {
+    font-family: Georgia, serif;
+    font-size: 13px;
+    color: #555;
+    pointer-events: none;
+  }
+
+  .step-btn {
+    padding: 8px 20px;
+    border: 1.5px solid #111;
+    background: #fff;
+    font-family: Georgia, serif;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+
+  .step-btn:hover:not(:disabled) {
+    background: #111;
+    color: #fff;
+  }
+
+  .step-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .step-btn.loading {
+    background: #111;
+    color: #fff;
+  }
+
+  .validation-msg {
+    font-size: 12px;
+    margin-top: 8px;
+    min-height: 16px;
+  }
+
+  .validation-msg.error { color: #a00; }
+  .validation-msg.ok { color: #050; }
+
+  /* Done check */
+  .done-mark {
+    display: none;
+    font-size: 13px;
+    color: #111;
+    font-weight: bold;
+    margin-top: 8px;
+  }
+
+  .step.done .done-mark { display: block; }
+  .step.done .file-upload-row { display: none; }
+  .step.done .step-hint { display: none; }
+  .step.done .validation-msg { display: none; }
+
+  /* Final message */
+  .final-msg {
+    display: none;
+    border: 1px solid #111;
+    padding: 20px 24px;
+    margin-top: 8px;
+    background: #f5f5f5;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .final-msg.show { display: block; }
+
+  .final-msg strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  /* Error banner */
+  .error-banner {
+    display: none;
+    border: 1px solid #a00;
+    padding: 12px 16px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #a00;
+    background: #fff8f8;
+  }
+
+  .error-banner.show { display: block; }
+
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 32px 0;
+  }
+
+  .footer {
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    margin-top: 48px;
+    border-top: 1px solid #eee;
+    padding-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="header">
+    <h1>MIS Report Submission</h1>
+    <p>Open Mind Services Limited &mdash; Daily Report Portal</p>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions">
+    <h2>Read Before Submitting</h2>
+    <ol>
+      <li><strong>Prepare all 3 files</strong> before starting. You will submit them one at a time in this order: Login Report, then Daywise Summary, then CDR.</li>
+      <li><strong>Check the date on each file.</strong> Make sure all 3 files are for the same date and have not been submitted before.</li>
+      <li><strong>Do not rename any file.</strong> Files must start with the exact names shown below. Renamed files will be rejected.</li>
+      <li><strong>Wait for confirmation</strong> after each upload before moving to the next. Do not close the browser during submission.</li>
+      <li><strong>Only one person can submit at a time.</strong> If the form is locked, wait a few minutes and refresh.</li>
+      <li><strong>If you see an error</strong> after 2 attempts, contact the MIS team immediately.</li>
+    </ol>
+    <div class="file-names">
+      <p>Required file name prefixes:</p>
+      <code>&#x2022; Loginout_Raw_Report</code>
+      <code>&#x2022; Daywise_Summary_Report</code>
+      <code>&#x2022; Call_Disposition_Report</code>
+    </div>
+  </div>
+
+  <!-- Your Name -->
+  <div class="field">
+    <label for="submitterName">Your Name / Department *</label>
+    <input type="text" id="submitterName" placeholder="e.g. Kajal — Operations Team">
+  </div>
+
+  <!-- Steps -->
+  <div class="steps-title">Upload Files — Step by Step</div>
+
+  <!-- Step 1: Login -->
+  <div class="step" id="step-1">
+    <div class="step-header">
+      <span class="step-num">Step 1 of 3</span>
+      <span class="step-title">Loginout Raw Report</span>
+      <span class="step-status" id="status-1">Pending</span>
+    </div>
+    <div class="step-hint">File must start with: <strong>Loginout_Raw_Report</strong></div>
+    <div class="file-upload-row">
+      <div class="file-input-wrap">
+        <input type="file" id="file-1" accept=".xls,.xlsx,.csv" onchange="handleFileSelect(1)">
+        <span class="file-input-label" id="file-label-1">Click to choose file...</span>
+      </div>
+      <button class="step-btn" id="btn-1" disabled onclick="submitStep(1)">Submit</button>
+    </div>
+    <div class="validation-msg" id="val-1"></div>
+    <div class="done-mark" id="done-1">&#10003; Uploaded successfully</div>
+  </div>
+
+  <!-- Step 2: APR -->
+  <div class="step locked" id="step-2">
+    <div class="step-header">
+      <span class="step-num">Step 2 of 3</span>
+      <span class="step-title">Daywise Summary Report</span>
+      <span class="step-status" id="status-2">Waiting</span>
+    </div>
+    <div class="step-hint">File must start with: <strong>Daywise_Summary_Report</strong></div>
+    <div class="file-upload-row">
+      <div class="file-input-wrap">
+        <input type="file" id="file-2" accept=".xls,.xlsx,.csv" onchange="handleFileSelect(2)">
+        <span class="file-input-label" id="file-label-2">Click to choose file...</span>
+      </div>
+      <button class="step-btn" id="btn-2" disabled onclick="submitStep(2)">Submit</button>
+    </div>
+    <div class="validation-msg" id="val-2"></div>
+    <div class="done-mark" id="done-2">&#10003; Uploaded successfully</div>
+  </div>
+
+  <!-- Step 3: CDR -->
+  <div class="step locked" id="step-3">
+    <div class="step-header">
+      <span class="step-num">Step 3 of 3</span>
+      <span class="step-title">Call Disposition Report (CDR)</span>
+      <span class="step-status" id="status-3">Waiting</span>
+    </div>
+    <div class="step-hint">File must start with: <strong>Call_Disposition_Report</strong></div>
+    <div class="file-upload-row">
+      <div class="file-input-wrap">
+        <input type="file" id="file-3" accept=".xls,.xlsx,.csv" onchange="handleFileSelect(3)">
+        <span class="file-input-label" id="file-label-3">Click to choose file...</span>
+      </div>
+      <button class="step-btn" id="btn-3" disabled onclick="submitStep(3)">Submit</button>
+    </div>
+    <div class="validation-msg" id="val-3"></div>
+    <div class="done-mark" id="done-3">&#10003; Uploaded successfully</div>
+  </div>
+
+  <!-- Final Message -->
+  <div class="final-msg" id="finalMsg">
+    <strong>All 3 reports submitted successfully.</strong>
+    The data has been recorded in the MIS Google Sheet. You may close this page.<br><br>
+    If you notice any errors in the data or uploaded the wrong file, please do not re-submit. Contact the MIS team for corrections.
+  </div>
+
+  <!-- Error Banner -->
+  <div class="error-banner" id="errorBanner"></div>
+
+  <div class="footer">
+    Open Mind Services Limited &mdash; MIS Automation Portal &mdash; For issues contact the MIS team
+  </div>
+
+</div>
+
+<script>
+  const WEBHOOK_URL = 'https://inder20216.app.n8n.cloud/webhook/MIS-form';
+  const LOCK_KEY = 'mis_lock_v2';
+  const LOCK_DURATION = 5 * 60 * 1000;
+
+  const FILE_PREFIXES = {
+    1: 'Loginout_Raw_Report',
+    2: 'Daywise_Summary_Report',
+    3: 'Call_Disposition_Report'
+  };
+
+  const submittedFiles = { 1: null, 2: null, 3: null };
+  let currentStep = 1;
+
+  // Lock check
+  function isLocked() {
+    const lock = localStorage.getItem(LOCK_KEY);
+    if (!lock) return false;
+    const { ts } = JSON.parse(lock);
+    if (Date.now() - ts > LOCK_DURATION) {
+      localStorage.removeItem(LOCK_KEY);
+      return false;
+    }
+    return true;
+  }
+
+  function acquireLock() {
+    localStorage.setItem(LOCK_KEY, JSON.stringify({ ts: Date.now() }));
+  }
+
+  function releaseLock() {
+    localStorage.removeItem(LOCK_KEY);
+  }
+
+  // On load — check if already submitted today
+  function checkTodaySubmission() {
+    const key = 'mis_submitted_' + getTodayKey();
+    if (localStorage.getItem(key)) {
+      showFinalMsg();
+      lockAllSteps();
+    }
+  }
+
+  function getTodayKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  }
+
+  function markTodaySubmitted() {
+    localStorage.setItem('mis_submitted_' + getTodayKey(), '1');
+  }
+
+  function lockAllSteps() {
+    [1, 2, 3].forEach(i => {
+      document.getElementById('step-' + i).classList.add('locked');
+    });
+  }
+
+  function showFinalMsg() {
+    document.getElementById('finalMsg').classList.add('show');
+  }
+
+  // File select handler
+  function handleFileSelect(step) {
+    const input = document.getElementById('file-' + step);
+    const label = document.getElementById('file-label-' + step);
+    const valMsg = document.getElementById('val-' + step);
+    const btn = document.getElementById('btn-' + step);
+    const file = input.files[0];
+
+    valMsg.textContent = '';
+    valMsg.className = 'validation-msg';
+    btn.disabled = true;
+
+    if (!file) return;
+
+    const prefix = FILE_PREFIXES[step];
+
+    if (!file.name.startsWith(prefix)) {
+      label.textContent = file.name;
+      valMsg.textContent = 'Wrong file. This slot requires a file starting with: ' + prefix;
+      valMsg.className = 'validation-msg error';
+      return;
+    }
+
+    // Check duplicate across steps
+    for (let i = 1; i <= 3; i++) {
+      if (i !== step && submittedFiles[i] && submittedFiles[i] === file.name) {
+        valMsg.textContent = 'This file has already been submitted in a previous step.';
+        valMsg.className = 'validation-msg error';
+        label.textContent = file.name;
+        return;
+      }
+    }
+
+    // Check name field
+    const name = document.getElementById('submitterName').value.trim();
+    if (!name) {
+      valMsg.textContent = 'Please enter your name before uploading.';
+      valMsg.className = 'validation-msg error';
+      label.textContent = file.name;
+      return;
+    }
+
+    label.textContent = file.name;
+    valMsg.textContent = 'File looks good. Click Submit to proceed.';
+    valMsg.className = 'validation-msg ok';
+    btn.disabled = false;
+  }
+
+  // Submit step
+  async function submitStep(step) {
+    if (isLocked() && step !== currentStep) return;
+
+    const name = document.getElementById('submitterName').value.trim();
+    if (!name) {
+      showError('Please enter your name before submitting.');
+      return;
+    }
+
+    const input = document.getElementById('file-' + step);
+    const file = input.files[0];
+    if (!file) return;
+
+    const btn = document.getElementById('btn-' + step);
+    const valMsg = document.getElementById('val-' + step);
+    const statusEl = document.getElementById('status-' + step);
+
+    btn.disabled = true;
+    btn.textContent = 'Uploading...';
+    btn.classList.add('loading');
+    statusEl.textContent = 'Uploading...';
+    acquireLock();
+
+    clearError();
+
+    try {
+      const base64 = await toBase64(file);
+      const res = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileName: file.name,
+          fileContent: base64,
+          submittedBy: name,
+          submittedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+        })
+      });
+
+      if (!res.ok) throw new Error('Server returned ' + res.status);
+
+      // Mark step done
+      submittedFiles[step] = file.name;
+      const stepEl = document.getElementById('step-' + step);
+      stepEl.classList.add('done');
+      statusEl.textContent = 'Done';
+      statusEl.className = 'step-status done-text';
+
+      releaseLock();
+      valMsg.textContent = '';
+
+      // Move to next step or finish
+      if (step < 3) {
+        currentStep = step + 1;
+        const nextStep = document.getElementById('step-' + currentStep);
+        nextStep.classList.remove('locked');
+        document.getElementById('status-' + currentStep).textContent = 'Ready';
+      } else {
+        // All done
+        markTodaySubmitted();
+        showFinalMsg();
+      }
+
+    } catch (err) {
+      releaseLock();
+      btn.disabled = false;
+      btn.textContent = 'Submit';
+      btn.classList.remove('loading');
+      statusEl.textContent = 'Failed — try again';
+      showError('Upload failed. Please check your internet connection and try again. If the problem persists, contact the MIS team. Error: ' + err.message);
+    }
+  }
+
+  function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorBanner');
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+
+  function clearError() {
+    document.getElementById('errorBanner').classList.remove('show');
+  }
+
+  // On load
+  checkTodaySubmission();
+</script>
+
+</body>
+</html>
