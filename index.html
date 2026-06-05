@@ -318,6 +318,18 @@
     border-top: 1px solid #eee;
     padding-top: 16px;
   }
+
+  /* Countdown */
+  .countdown-box {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border: 1px solid #999;
+    margin-left: 8px;
+  }
+  .countdown-box.warn { border-color: #a00; color: #a00; }
+  .countdown-box.ok   { border-color: #050; color: #050; }
 </style>
 </head>
 <body>
@@ -369,7 +381,9 @@
   <div id="formPage">
 
     <div class="session-bar">
-      <span>Logged in as: <strong id="sessionLabel"></strong></span>
+      <span>Logged in as: <strong id="sessionLabel"></strong>
+        <span class="countdown-box ok" id="countdownBox">15:00</span>
+      </span>
       <button class="logout-btn" onclick="doLogout()">Log Out</button>
     </div>
 
@@ -477,9 +491,9 @@
   const SESSION_SET   = 'https://automation.openmindhelpline.com/webhook/MIS-session-set';
   const SESSION_CLEAR = 'https://automation.openmindhelpline.com/webhook/MIS-session-clear';
 
-  const TIMEOUT_MS  = 15 * 60 * 1000;
-  const WARN_MS     = 2  * 60 * 1000;
-  const POLL_MS     = 10 * 1000;
+  const SESSION_SECS = 15 * 60;   // Hard 15-min fixed session limit
+  const WARN_SECS    = 2  * 60;   // Show warning at 2 min remaining
+  const POLL_MS      = 10 * 1000;
 
   const FILE_PREFIXES = {
     1: 'Loginout_Raw_Report',
@@ -487,12 +501,12 @@
     3: 'Call_Disposition_Report'
   };
 
-  let sessionUser  = null;
-  let sessionDept  = null;
-  let sessionToken = null;
-  let currentStep  = 1;
-  let activityTimer = null;
-  let warnTimer     = null;
+  let sessionUser   = null;
+  let sessionDept   = null;
+  let sessionToken  = null;
+  let currentStep   = 1;
+  let countdownInterval = null;
+  let secondsLeft   = SESSION_SECS;
   const submittedFiles = { 1: null, 2: null, 3: null };
 
   // ============================================================
@@ -505,6 +519,7 @@
 
   async function refreshStatus() {
     const el = document.getElementById('systemStatus');
+    if (!el) return;
     try {
       const res  = await fetch(SESSION_CHECK);
       const data = await res.json();
@@ -521,6 +536,26 @@
     } catch(e) {
       el.innerHTML = `<span class="status-checking">Unable to check system status. Check your connection.</span>`;
     }
+  }
+
+  // ============================================================
+  // PAGES
+  // ============================================================
+  function showLoginPage() {
+    document.getElementById('loginPage').style.display = 'block';
+    document.getElementById('formPage').style.display  = 'none';
+    stopCountdown();
+    refreshStatus();
+  }
+
+  function showFormPage() {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('formPage').style.display  = 'block';
+    document.getElementById('loginBtn').disabled = false;
+    document.getElementById('loginBtn').textContent = 'Sign In';
+    document.getElementById('sessionLabel').textContent = sessionUser + ' — ' + sessionDept;
+    startCountdown();
+    refreshStatus();
   }
 
   // ============================================================
@@ -541,7 +576,6 @@
     btn.textContent = 'Checking...';
 
     try {
-      // Check if session is free
       const checkRes  = await fetch(SESSION_CHECK);
       const checkData = await checkRes.json();
 
@@ -552,10 +586,8 @@
         return;
       }
 
-      // Generate token
       sessionToken = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
-      // Set session
       const setRes = await fetch(SESSION_SET, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -575,7 +607,6 @@
 
       sessionUser = name;
       sessionDept = dept;
-
       showFormPage();
 
     } catch(e) {
@@ -583,26 +614,6 @@
       btn.disabled = false;
       btn.textContent = 'Sign In';
     }
-  }
-
-  // ============================================================
-  // PAGES
-  // ============================================================
-  function showFormPage() {
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('formPage').style.display  = 'block';
-    document.getElementById('sessionLabel').textContent = sessionUser + ' — ' + sessionDept;
-    document.getElementById('loginBtn').disabled = false;
-    document.getElementById('loginBtn').textContent = 'Sign In';
-    startActivityTimer();
-    refreshStatus();
-  }
-
-  function showLoginPage() {
-    document.getElementById('loginPage').style.display = 'block';
-    document.getElementById('formPage').style.display  = 'none';
-    clearTimers();
-    refreshStatus();
   }
 
   // ============================================================
@@ -627,42 +638,51 @@
   }
 
   // ============================================================
-  // ACTIVITY TIMER
+  // FIXED 15-MINUTE COUNTDOWN (hard limit from login time)
   // ============================================================
-  function startActivityTimer() {
-    clearTimers();
-    resetActivityTimer();
-    document.addEventListener('mousemove', resetActivityTimer);
-    document.addEventListener('keypress',  resetActivityTimer);
-    document.addEventListener('click',     resetActivityTimer);
+  function startCountdown() {
+    stopCountdown();
+    secondsLeft = SESSION_SECS;
+    updateCountdownDisplay();
+    countdownInterval = setInterval(async () => {
+      secondsLeft--;
+      updateCountdownDisplay();
+      if (secondsLeft <= 0) {
+        stopCountdown();
+        await clearSession();
+        alert('Your 15-minute session has ended. Please log in again.');
+        sessionUser  = null;
+        sessionDept  = null;
+        sessionToken = null;
+        showLoginPage();
+      }
+    }, 1000);
   }
 
-  function resetActivityTimer() {
-    clearTimeout(activityTimer);
-    clearTimeout(warnTimer);
-    document.getElementById('timeoutWarning').textContent = '';
-
-    warnTimer = setTimeout(() => {
-      document.getElementById('timeoutWarning').textContent =
-        'Warning: You will be automatically logged out in 2 minutes due to inactivity.';
-    }, TIMEOUT_MS - WARN_MS);
-
-    activityTimer = setTimeout(async () => {
-      await clearSession();
-      alert('You have been automatically logged out due to inactivity.');
-      sessionUser  = null;
-      sessionDept  = null;
-      sessionToken = null;
-      showLoginPage();
-    }, TIMEOUT_MS);
+  function stopCountdown() {
+    if (countdownInterval) {
+      clearInterval(countdownInterval);
+      countdownInterval = null;
+    }
   }
 
-  function clearTimers() {
-    clearTimeout(activityTimer);
-    clearTimeout(warnTimer);
-    document.removeEventListener('mousemove', resetActivityTimer);
-    document.removeEventListener('keypress',  resetActivityTimer);
-    document.removeEventListener('click',     resetActivityTimer);
+  function updateCountdownDisplay() {
+    const box = document.getElementById('countdownBox');
+    const warn = document.getElementById('timeoutWarning');
+    if (!box) return;
+
+    const m = Math.floor(secondsLeft / 60);
+    const s = secondsLeft % 60;
+    const label = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    box.textContent = label;
+
+    if (secondsLeft <= WARN_SECS) {
+      box.className = 'countdown-box warn';
+      if (warn) warn.textContent = `Warning: Session expires in ${label}. Complete your submission.`;
+    } else {
+      box.className = 'countdown-box ok';
+      if (warn) warn.textContent = '';
+    }
   }
 
   // ============================================================
@@ -690,7 +710,6 @@
       return;
     }
 
-    // Check duplicate
     for (let i = 1; i <= 3; i++) {
       if (i !== step && submittedFiles[i] && submittedFiles[i] === file.name) {
         valMsg.textContent = 'This file has already been submitted in a previous step.';
@@ -710,8 +729,8 @@
   // SUBMIT
   // ============================================================
   async function submitStep(step) {
-    const input    = document.getElementById('file-' + step);
-    const file     = input.files[0];
+    const input = document.getElementById('file-' + step);
+    const file  = input.files[0];
     if (!file) return;
 
     const btn      = document.getElementById('btn-' + step);
@@ -752,9 +771,8 @@
         document.getElementById('step-' + currentStep).classList.remove('locked');
         document.getElementById('status-' + currentStep).textContent = 'Ready';
       } else {
-        // All done
         await clearSession();
-        clearTimers();
+        stopCountdown();
         document.getElementById('finalMsg').classList.add('show');
         document.querySelector('.session-bar').style.display = 'none';
         document.getElementById('timeoutWarning').textContent = '';
@@ -769,6 +787,9 @@
     }
   }
 
+  // ============================================================
+  // HELPERS
+  // ============================================================
   function toBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
