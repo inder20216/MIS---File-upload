@@ -27,16 +27,117 @@
     margin-bottom: 32px;
   }
 
-  .header h1 {
-    font-size: 22px;
-    font-weight: normal;
-    letter-spacing: 0.02em;
+  .header h1 { font-size: 22px; font-weight: normal; letter-spacing: 0.02em; }
+  .header p { font-size: 13px; color: #555; margin-top: 4px; }
+
+  /* Pages */
+  #loginPage  { display: block; }
+  #formPage   { display: none; }
+
+  /* Login */
+  .login-box {
+    border: 1px solid #ccc;
+    padding: 28px;
+    margin-bottom: 24px;
   }
 
-  .header p {
+  .login-box h2 {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 20px;
+  }
+
+  .field { margin-bottom: 18px; }
+
+  .field label {
+    display: block;
     font-size: 13px;
-    color: #555;
-    margin-top: 4px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .field input[type="text"],
+  .field select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #999;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+  }
+
+  .field input[type="text"]:focus,
+  .field select:focus { border-color: #111; }
+
+  .login-btn {
+    width: 100%;
+    padding: 10px;
+    border: 1.5px solid #111;
+    background: #111;
+    color: #fff;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .login-btn:hover { background: #333; }
+  .login-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .system-status {
+    border: 1px solid #ccc;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    background: #fafafa;
+  }
+
+  .status-busy { color: #a00; font-weight: bold; }
+  .status-free { color: #050; font-weight: bold; }
+  .status-checking { color: #555; font-style: italic; }
+
+  .login-error {
+    font-size: 13px;
+    color: #a00;
+    margin-top: 10px;
+    min-height: 18px;
+  }
+
+  /* Session bar */
+  .session-bar {
+    border: 1px solid #ddd;
+    padding: 10px 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fafafa;
+  }
+
+  .session-bar span { color: #555; }
+  .session-bar strong { color: #111; }
+
+  .logout-btn {
+    padding: 4px 12px;
+    border: 1px solid #999;
+    background: #fff;
+    font-family: Georgia, serif;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .logout-btn:hover { background: #111; color: #fff; border-color: #111; }
+
+  .timeout-warning {
+    font-size: 12px;
+    color: #a00;
+    text-align: right;
+    margin-bottom: 16px;
+    min-height: 16px;
   }
 
   /* Instructions */
@@ -55,9 +156,7 @@
     margin-bottom: 12px;
   }
 
-  .instructions ol {
-    padding-left: 20px;
-  }
+  .instructions ol { padding-left: 20px; }
 
   .instructions ol li {
     font-size: 13px;
@@ -65,9 +164,7 @@
     margin-bottom: 6px;
   }
 
-  .instructions ol li strong {
-    color: #111;
-  }
+  .instructions ol li strong { color: #111; }
 
   .file-names {
     margin-top: 14px;
@@ -77,10 +174,7 @@
     color: #333;
   }
 
-  .file-names p {
-    margin-bottom: 6px;
-    font-weight: bold;
-  }
+  .file-names p { margin-bottom: 6px; font-weight: bold; }
 
   .file-names code {
     display: block;
@@ -88,31 +182,6 @@
     font-size: 12px;
     color: #333;
     padding: 3px 0;
-  }
-
-  /* Name field */
-  .field {
-    margin-bottom: 28px;
-  }
-
-  .field label {
-    display: block;
-    font-size: 13px;
-    font-weight: bold;
-    margin-bottom: 6px;
-  }
-
-  .field input[type="text"] {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #999;
-    font-family: Georgia, serif;
-    font-size: 14px;
-    outline: none;
-  }
-
-  .field input[type="text"]:focus {
-    border-color: #111;
   }
 
   /* Steps */
@@ -130,18 +199,10 @@
     margin-bottom: 24px;
     padding: 20px;
     border: 1px solid #ddd;
-    position: relative;
   }
 
-  .step.locked {
-    opacity: 0.4;
-    pointer-events: none;
-  }
-
-  .step.done {
-    border-color: #111;
-    background: #f5f5f5;
-  }
+  .step.locked { opacity: 0.4; pointer-events: none; }
+  .step.done { border-color: #111; background: #f5f5f5; }
 
   .step-header {
     display: flex;
@@ -159,34 +220,13 @@
     min-width: 60px;
   }
 
-  .step-title {
-    font-size: 15px;
-    font-weight: bold;
-  }
+  .step-title { font-size: 15px; font-weight: bold; }
+  .step-status { margin-left: auto; font-size: 12px; color: #555; }
+  .step-status.done-text { font-weight: bold; color: #111; }
 
-  .step-status {
-    margin-left: auto;
-    font-size: 12px;
-    color: #555;
-  }
+  .step-hint { font-size: 12px; color: #555; margin-bottom: 12px; font-style: italic; }
 
-  .step-status.done-text {
-    font-weight: bold;
-    color: #111;
-  }
-
-  .step-hint {
-    font-size: 12px;
-    color: #555;
-    margin-bottom: 12px;
-    font-style: italic;
-  }
-
-  .file-upload-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .file-upload-row { display: flex; align-items: center; gap: 12px; }
 
   .file-input-wrap {
     flex: 1;
@@ -222,34 +262,16 @@
     font-size: 13px;
     cursor: pointer;
     white-space: nowrap;
-    transition: background 0.15s;
   }
 
-  .step-btn:hover:not(:disabled) {
-    background: #111;
-    color: #fff;
-  }
+  .step-btn:hover:not(:disabled) { background: #111; color: #fff; }
+  .step-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .step-btn.loading { background: #111; color: #fff; }
 
-  .step-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-
-  .step-btn.loading {
-    background: #111;
-    color: #fff;
-  }
-
-  .validation-msg {
-    font-size: 12px;
-    margin-top: 8px;
-    min-height: 16px;
-  }
-
+  .validation-msg { font-size: 12px; margin-top: 8px; min-height: 16px; }
   .validation-msg.error { color: #a00; }
   .validation-msg.ok { color: #050; }
 
-  /* Done check */
   .done-mark {
     display: none;
     font-size: 13px;
@@ -263,7 +285,6 @@
   .step.done .step-hint { display: none; }
   .step.done .validation-msg { display: none; }
 
-  /* Final message */
   .final-msg {
     display: none;
     border: 1px solid #111;
@@ -275,31 +296,19 @@
   }
 
   .final-msg.show { display: block; }
+  .final-msg strong { display: block; font-size: 15px; margin-bottom: 8px; }
 
-  .final-msg strong {
-    display: block;
-    font-size: 15px;
-    margin-bottom: 8px;
-  }
-
-  /* Error banner */
   .error-banner {
     display: none;
     border: 1px solid #a00;
     padding: 12px 16px;
-    margin-top: 8px;
+    margin-top: 12px;
     font-size: 13px;
     color: #a00;
     background: #fff8f8;
   }
 
   .error-banner.show { display: block; }
-
-  hr {
-    border: none;
-    border-top: 1px solid #ddd;
-    margin: 32px 0;
-  }
 
   .footer {
     font-size: 12px;
@@ -320,100 +329,138 @@
     <p>Open Mind Services Limited &mdash; Daily Report Portal</p>
   </div>
 
-  <!-- Instructions -->
-  <div class="instructions">
-    <h2>Read Before Submitting</h2>
-    <ol>
-      <li><strong>Prepare all 3 files</strong> before starting. You will submit them one at a time in this order: Login Report, then Daywise Summary, then CDR.</li>
-      <li><strong>Check the date on each file.</strong> Make sure all 3 files are for the same date and have not been submitted before.</li>
-      <li><strong>Do not rename any file.</strong> Files must start with the exact names shown below. Renamed files will be rejected.</li>
-      <li><strong>Wait for confirmation</strong> after each upload before moving to the next. Do not close the browser during submission.</li>
-      <li><strong>Only one person can submit at a time.</strong> If the form is locked, wait a few minutes and refresh.</li>
-      <li><strong>If you see an error</strong> after 2 attempts, contact the MIS team immediately.</li>
-    </ol>
-    <div class="file-names">
-      <p>Required file name prefixes:</p>
-      <code>&#x2022; Loginout_Raw_Report</code>
-      <code>&#x2022; Daywise_Summary_Report</code>
-      <code>&#x2022; Call_Disposition_Report</code>
+  <!-- ===== LOGIN PAGE ===== -->
+  <div id="loginPage">
+
+    <div class="system-status" id="systemStatus">
+      <span class="status-checking">Checking system status...</span>
     </div>
-  </div>
 
-  <!-- Your Name -->
-  <div class="field">
-    <label for="submitterName">Your Name / Department *</label>
-    <input type="text" id="submitterName" placeholder="e.g. Kajal — Operations Team">
-  </div>
+    <div class="login-box">
+      <h2>Sign In to Submit Reports</h2>
 
-  <!-- Steps -->
-  <div class="steps-title">Upload Files — Step by Step</div>
-
-  <!-- Step 1: Login -->
-  <div class="step" id="step-1">
-    <div class="step-header">
-      <span class="step-num">Step 1 of 3</span>
-      <span class="step-title">Loginout Raw Report</span>
-      <span class="step-status" id="status-1">Pending</span>
-    </div>
-    <div class="step-hint">File must start with: <strong>Loginout_Raw_Report</strong></div>
-    <div class="file-upload-row">
-      <div class="file-input-wrap">
-        <input type="file" id="file-1" accept=".xls,.xlsx,.csv" onchange="handleFileSelect(1)">
-        <span class="file-input-label" id="file-label-1">Click to choose file...</span>
+      <div class="field">
+        <label for="loginName">Your Name *</label>
+        <input type="text" id="loginName" placeholder="Enter your full name">
       </div>
-      <button class="step-btn" id="btn-1" disabled onclick="submitStep(1)">Submit</button>
-    </div>
-    <div class="validation-msg" id="val-1"></div>
-    <div class="done-mark" id="done-1">&#10003; Uploaded successfully</div>
-  </div>
 
-  <!-- Step 2: APR -->
-  <div class="step locked" id="step-2">
-    <div class="step-header">
-      <span class="step-num">Step 2 of 3</span>
-      <span class="step-title">Daywise Summary Report</span>
-      <span class="step-status" id="status-2">Waiting</span>
-    </div>
-    <div class="step-hint">File must start with: <strong>Daywise_Summary_Report</strong></div>
-    <div class="file-upload-row">
-      <div class="file-input-wrap">
-        <input type="file" id="file-2" accept=".xls,.xlsx,.csv" onchange="handleFileSelect(2)">
-        <span class="file-input-label" id="file-label-2">Click to choose file...</span>
+      <div class="field">
+        <label for="loginDept">Department *</label>
+        <select id="loginDept">
+          <option value="">— Select your department —</option>
+          <option value="Apollo">Apollo</option>
+          <option value="Resmed">Resmed</option>
+          <option value="Facility">Facility</option>
+          <option value="PSRI">PSRI</option>
+          <option value="Vantive">Vantive</option>
+          <option value="Maccaron">Maccaron</option>
+          <option value="HR">HR</option>
+          <option value="LOTS">LOTS</option>
+        </select>
       </div>
-      <button class="step-btn" id="btn-2" disabled onclick="submitStep(2)">Submit</button>
+
+      <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
+      <div class="login-error" id="loginError"></div>
     </div>
-    <div class="validation-msg" id="val-2"></div>
-    <div class="done-mark" id="done-2">&#10003; Uploaded successfully</div>
+
   </div>
 
-  <!-- Step 3: CDR -->
-  <div class="step locked" id="step-3">
-    <div class="step-header">
-      <span class="step-num">Step 3 of 3</span>
-      <span class="step-title">Call Disposition Report (CDR)</span>
-      <span class="step-status" id="status-3">Waiting</span>
+  <!-- ===== FORM PAGE ===== -->
+  <div id="formPage">
+
+    <div class="session-bar">
+      <span>Logged in as: <strong id="sessionLabel"></strong></span>
+      <button class="logout-btn" onclick="doLogout()">Log Out</button>
     </div>
-    <div class="step-hint">File must start with: <strong>Call_Disposition_Report</strong></div>
-    <div class="file-upload-row">
-      <div class="file-input-wrap">
-        <input type="file" id="file-3" accept=".xls,.xlsx,.csv" onchange="handleFileSelect(3)">
-        <span class="file-input-label" id="file-label-3">Click to choose file...</span>
+
+    <div class="timeout-warning" id="timeoutWarning"></div>
+
+    <!-- Instructions -->
+    <div class="instructions">
+      <h2>Read Before Submitting</h2>
+      <ol>
+        <li><strong>Prepare all 3 files</strong> before starting. Submit them one at a time in this order: Login Report first, then Daywise Summary, then CDR.</li>
+        <li><strong>Check the date on each file.</strong> All 3 files must be for the same date and must not have been submitted before.</li>
+        <li><strong>Do not rename any file.</strong> Files must start with the exact names shown below. Renamed files will be rejected.</li>
+        <li><strong>Wait for confirmation</strong> after each upload before moving to the next. Do not close the browser during submission.</li>
+        <li><strong>If you see an error</strong> after 2 attempts, contact the MIS team immediately.</li>
+      </ol>
+      <div class="file-names">
+        <p>Required file name prefixes:</p>
+        <code>&#x2022; Loginout_Raw_Report</code>
+        <code>&#x2022; Daywise_Summary_Report</code>
+        <code>&#x2022; Call_Disposition_Report</code>
       </div>
-      <button class="step-btn" id="btn-3" disabled onclick="submitStep(3)">Submit</button>
     </div>
-    <div class="validation-msg" id="val-3"></div>
-    <div class="done-mark" id="done-3">&#10003; Uploaded successfully</div>
-  </div>
 
-  <!-- Final Message -->
-  <div class="final-msg" id="finalMsg">
-    <strong>All 3 reports submitted successfully.</strong>
-    The data has been recorded in the MIS Google Sheet. You may close this page.<br><br>
-    If you notice any errors in the data or uploaded the wrong file, please do not re-submit. Contact the MIS team for corrections.
-  </div>
+    <div class="steps-title">Upload Files — Step by Step</div>
 
-  <!-- Error Banner -->
-  <div class="error-banner" id="errorBanner"></div>
+    <!-- Step 1 -->
+    <div class="step" id="step-1">
+      <div class="step-header">
+        <span class="step-num">Step 1 of 3</span>
+        <span class="step-title">Loginout Raw Report</span>
+        <span class="step-status" id="status-1">Pending</span>
+      </div>
+      <div class="step-hint">File must start with: <strong>Loginout_Raw_Report</strong></div>
+      <div class="file-upload-row">
+        <div class="file-input-wrap">
+          <input type="file" id="file-1" accept=".xls,.xlsx,.csv" onchange="handleFileSelect(1)">
+          <span class="file-input-label" id="file-label-1">Click to choose file...</span>
+        </div>
+        <button class="step-btn" id="btn-1" disabled onclick="submitStep(1)">Submit</button>
+      </div>
+      <div class="validation-msg" id="val-1"></div>
+      <div class="done-mark" id="done-1">&#10003; Uploaded successfully</div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step locked" id="step-2">
+      <div class="step-header">
+        <span class="step-num">Step 2 of 3</span>
+        <span class="step-title">Daywise Summary Report</span>
+        <span class="step-status" id="status-2">Waiting</span>
+      </div>
+      <div class="step-hint">File must start with: <strong>Daywise_Summary_Report</strong></div>
+      <div class="file-upload-row">
+        <div class="file-input-wrap">
+          <input type="file" id="file-2" accept=".xls,.xlsx,.csv" onchange="handleFileSelect(2)">
+          <span class="file-input-label" id="file-label-2">Click to choose file...</span>
+        </div>
+        <button class="step-btn" id="btn-2" disabled onclick="submitStep(2)">Submit</button>
+      </div>
+      <div class="validation-msg" id="val-2"></div>
+      <div class="done-mark" id="done-2">&#10003; Uploaded successfully</div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step locked" id="step-3">
+      <div class="step-header">
+        <span class="step-num">Step 3 of 3</span>
+        <span class="step-title">Call Disposition Report (CDR)</span>
+        <span class="step-status" id="status-3">Waiting</span>
+      </div>
+      <div class="step-hint">File must start with: <strong>Call_Disposition_Report</strong></div>
+      <div class="file-upload-row">
+        <div class="file-input-wrap">
+          <input type="file" id="file-3" accept=".xls,.xlsx,.csv" onchange="handleFileSelect(3)">
+          <span class="file-input-label" id="file-label-3">Click to choose file...</span>
+        </div>
+        <button class="step-btn" id="btn-3" disabled onclick="submitStep(3)">Submit</button>
+      </div>
+      <div class="validation-msg" id="val-3"></div>
+      <div class="done-mark" id="done-3">&#10003; Uploaded successfully</div>
+    </div>
+
+    <div class="final-msg" id="finalMsg">
+      <strong>All 3 reports submitted successfully.</strong>
+      The data has been recorded in the MIS Google Sheet. You have been logged out automatically.<br><br>
+      If you notice any errors or uploaded the wrong file, please do not re-submit. Contact the MIS team for corrections.
+    </div>
+
+    <div class="error-banner" id="errorBanner"></div>
+
+  </div>
 
   <div class="footer">
     Open Mind Services Limited &mdash; MIS Automation Portal &mdash; For issues contact the MIS team
@@ -422,9 +469,17 @@
 </div>
 
 <script>
-  const WEBHOOK_URL = 'https://inder20216.app.n8n.cloud/webhook/MIS-form';
-  const LOCK_KEY = 'mis_lock_v2';
-  const LOCK_DURATION = 5 * 60 * 1000;
+  // ============================================================
+  // CONFIG
+  // ============================================================
+  const WEBHOOK_URL   = 'https://inder20216.app.n8n.cloud/webhook/MIS-form';
+  const SESSION_CHECK = 'https://automation.openmindhelpline.com/webhook/MIS-session-check';
+  const SESSION_SET   = 'https://automation.openmindhelpline.com/webhook/MIS-session-set';
+  const SESSION_CLEAR = 'https://automation.openmindhelpline.com/webhook/MIS-session-clear';
+
+  const TIMEOUT_MS  = 15 * 60 * 1000;
+  const WARN_MS     = 2  * 60 * 1000;
+  const POLL_MS     = 10 * 1000;
 
   const FILE_PREFIXES = {
     1: 'Loginout_Raw_Report',
@@ -432,64 +487,193 @@
     3: 'Call_Disposition_Report'
   };
 
+  let sessionUser  = null;
+  let sessionDept  = null;
+  let sessionToken = null;
+  let currentStep  = 1;
+  let activityTimer = null;
+  let warnTimer     = null;
   const submittedFiles = { 1: null, 2: null, 3: null };
-  let currentStep = 1;
 
-  // Lock check
-  function isLocked() {
-    const lock = localStorage.getItem(LOCK_KEY);
-    if (!lock) return false;
-    const { ts } = JSON.parse(lock);
-    if (Date.now() - ts > LOCK_DURATION) {
-      localStorage.removeItem(LOCK_KEY);
-      return false;
-    }
-    return true;
-  }
+  // ============================================================
+  // ON LOAD
+  // ============================================================
+  window.onload = async function() {
+    await refreshStatus();
+    setInterval(refreshStatus, POLL_MS);
+  };
 
-  function acquireLock() {
-    localStorage.setItem(LOCK_KEY, JSON.stringify({ ts: Date.now() }));
-  }
-
-  function releaseLock() {
-    localStorage.removeItem(LOCK_KEY);
-  }
-
-  // On load — check if already submitted today
-  function checkTodaySubmission() {
-    const key = 'mis_submitted_' + getTodayKey();
-    if (localStorage.getItem(key)) {
-      showFinalMsg();
-      lockAllSteps();
+  async function refreshStatus() {
+    const el = document.getElementById('systemStatus');
+    try {
+      const res  = await fetch(SESSION_CHECK);
+      const data = await res.json();
+      if (data.active) {
+        const isMine = data.token && data.token === sessionToken;
+        if (isMine) {
+          el.innerHTML = `<span class="status-free">&#9679; You are logged in as <strong>${data.name} &mdash; ${data.dept}</strong></span>`;
+        } else {
+          el.innerHTML = `<span class="status-busy">&#9679; System busy &mdash; <strong>${data.name} (${data.dept})</strong> is currently submitting. Please wait.</span>`;
+        }
+      } else {
+        el.innerHTML = `<span class="status-free">&#9679; System is free &mdash; you can log in and submit.</span>`;
+      }
+    } catch(e) {
+      el.innerHTML = `<span class="status-checking">Unable to check system status. Check your connection.</span>`;
     }
   }
 
-  function getTodayKey() {
-    const d = new Date();
-    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  // ============================================================
+  // LOGIN
+  // ============================================================
+  async function doLogin() {
+    const name  = document.getElementById('loginName').value.trim();
+    const dept  = document.getElementById('loginDept').value;
+    const errEl = document.getElementById('loginError');
+    const btn   = document.getElementById('loginBtn');
+
+    errEl.textContent = '';
+
+    if (!name) { errEl.textContent = 'Please enter your name.'; return; }
+    if (!dept) { errEl.textContent = 'Please select your department.'; return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Checking...';
+
+    try {
+      // Check if session is free
+      const checkRes  = await fetch(SESSION_CHECK);
+      const checkData = await checkRes.json();
+
+      if (checkData.active) {
+        errEl.textContent = `Cannot log in — ${checkData.name} (${checkData.dept}) is currently submitting. Please wait and try again.`;
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+        return;
+      }
+
+      // Generate token
+      sessionToken = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      // Set session
+      const setRes = await fetch(SESSION_SET, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, dept, token: sessionToken })
+      });
+
+      if (!setRes.ok) throw new Error('Failed to create session');
+
+      const setData = await setRes.json();
+
+      if (!setData.success) {
+        errEl.textContent = `Cannot log in — ${setData.name} (${setData.dept}) just logged in. Please wait.`;
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+        return;
+      }
+
+      sessionUser = name;
+      sessionDept = dept;
+
+      showFormPage();
+
+    } catch(e) {
+      errEl.textContent = 'Login failed. Please try again. Error: ' + e.message;
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    }
   }
 
-  function markTodaySubmitted() {
-    localStorage.setItem('mis_submitted_' + getTodayKey(), '1');
+  // ============================================================
+  // PAGES
+  // ============================================================
+  function showFormPage() {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('formPage').style.display  = 'block';
+    document.getElementById('sessionLabel').textContent = sessionUser + ' — ' + sessionDept;
+    document.getElementById('loginBtn').disabled = false;
+    document.getElementById('loginBtn').textContent = 'Sign In';
+    startActivityTimer();
+    refreshStatus();
   }
 
-  function lockAllSteps() {
-    [1, 2, 3].forEach(i => {
-      document.getElementById('step-' + i).classList.add('locked');
-    });
+  function showLoginPage() {
+    document.getElementById('loginPage').style.display = 'block';
+    document.getElementById('formPage').style.display  = 'none';
+    clearTimers();
+    refreshStatus();
   }
 
-  function showFinalMsg() {
-    document.getElementById('finalMsg').classList.add('show');
+  // ============================================================
+  // LOGOUT
+  // ============================================================
+  async function doLogout() {
+    await clearSession();
+    sessionUser  = null;
+    sessionDept  = null;
+    sessionToken = null;
+    showLoginPage();
   }
 
-  // File select handler
+  async function clearSession() {
+    try {
+      await fetch(SESSION_CLEAR, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: sessionToken })
+      });
+    } catch(e) {}
+  }
+
+  // ============================================================
+  // ACTIVITY TIMER
+  // ============================================================
+  function startActivityTimer() {
+    clearTimers();
+    resetActivityTimer();
+    document.addEventListener('mousemove', resetActivityTimer);
+    document.addEventListener('keypress',  resetActivityTimer);
+    document.addEventListener('click',     resetActivityTimer);
+  }
+
+  function resetActivityTimer() {
+    clearTimeout(activityTimer);
+    clearTimeout(warnTimer);
+    document.getElementById('timeoutWarning').textContent = '';
+
+    warnTimer = setTimeout(() => {
+      document.getElementById('timeoutWarning').textContent =
+        'Warning: You will be automatically logged out in 2 minutes due to inactivity.';
+    }, TIMEOUT_MS - WARN_MS);
+
+    activityTimer = setTimeout(async () => {
+      await clearSession();
+      alert('You have been automatically logged out due to inactivity.');
+      sessionUser  = null;
+      sessionDept  = null;
+      sessionToken = null;
+      showLoginPage();
+    }, TIMEOUT_MS);
+  }
+
+  function clearTimers() {
+    clearTimeout(activityTimer);
+    clearTimeout(warnTimer);
+    document.removeEventListener('mousemove', resetActivityTimer);
+    document.removeEventListener('keypress',  resetActivityTimer);
+    document.removeEventListener('click',     resetActivityTimer);
+  }
+
+  // ============================================================
+  // FILE HANDLING
+  // ============================================================
   function handleFileSelect(step) {
-    const input = document.getElementById('file-' + step);
-    const label = document.getElementById('file-label-' + step);
+    const input  = document.getElementById('file-' + step);
+    const label  = document.getElementById('file-label-' + step);
     const valMsg = document.getElementById('val-' + step);
-    const btn = document.getElementById('btn-' + step);
-    const file = input.files[0];
+    const btn    = document.getElementById('btn-' + step);
+    const file   = input.files[0];
 
     valMsg.textContent = '';
     valMsg.className = 'validation-msg';
@@ -506,7 +690,7 @@
       return;
     }
 
-    // Check duplicate across steps
+    // Check duplicate
     for (let i = 1; i <= 3; i++) {
       if (i !== step && submittedFiles[i] && submittedFiles[i] === file.name) {
         valMsg.textContent = 'This file has already been submitted in a previous step.';
@@ -516,45 +700,28 @@
       }
     }
 
-    // Check name field
-    const name = document.getElementById('submitterName').value.trim();
-    if (!name) {
-      valMsg.textContent = 'Please enter your name before uploading.';
-      valMsg.className = 'validation-msg error';
-      label.textContent = file.name;
-      return;
-    }
-
     label.textContent = file.name;
     valMsg.textContent = 'File looks good. Click Submit to proceed.';
     valMsg.className = 'validation-msg ok';
     btn.disabled = false;
   }
 
-  // Submit step
+  // ============================================================
+  // SUBMIT
+  // ============================================================
   async function submitStep(step) {
-    if (isLocked() && step !== currentStep) return;
-
-    const name = document.getElementById('submitterName').value.trim();
-    if (!name) {
-      showError('Please enter your name before submitting.');
-      return;
-    }
-
-    const input = document.getElementById('file-' + step);
-    const file = input.files[0];
+    const input    = document.getElementById('file-' + step);
+    const file     = input.files[0];
     if (!file) return;
 
-    const btn = document.getElementById('btn-' + step);
-    const valMsg = document.getElementById('val-' + step);
+    const btn      = document.getElementById('btn-' + step);
+    const valMsg   = document.getElementById('val-' + step);
     const statusEl = document.getElementById('status-' + step);
 
     btn.disabled = true;
     btn.textContent = 'Uploading...';
     btn.classList.add('loading');
     statusEl.textContent = 'Uploading...';
-    acquireLock();
-
     clearError();
 
     try {
@@ -563,51 +730,49 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          fileName: file.name,
+          fileName:    file.name,
           fileContent: base64,
-          submittedBy: name,
+          submittedBy: sessionUser,
+          department:  sessionDept,
           submittedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
         })
       });
 
       if (!res.ok) throw new Error('Server returned ' + res.status);
 
-      // Mark step done
       submittedFiles[step] = file.name;
       const stepEl = document.getElementById('step-' + step);
       stepEl.classList.add('done');
       statusEl.textContent = 'Done';
       statusEl.className = 'step-status done-text';
-
-      releaseLock();
       valMsg.textContent = '';
 
-      // Move to next step or finish
       if (step < 3) {
         currentStep = step + 1;
-        const nextStep = document.getElementById('step-' + currentStep);
-        nextStep.classList.remove('locked');
+        document.getElementById('step-' + currentStep).classList.remove('locked');
         document.getElementById('status-' + currentStep).textContent = 'Ready';
       } else {
         // All done
-        markTodaySubmitted();
-        showFinalMsg();
+        await clearSession();
+        clearTimers();
+        document.getElementById('finalMsg').classList.add('show');
+        document.querySelector('.session-bar').style.display = 'none';
+        document.getElementById('timeoutWarning').textContent = '';
       }
 
-    } catch (err) {
-      releaseLock();
+    } catch(err) {
       btn.disabled = false;
       btn.textContent = 'Submit';
       btn.classList.remove('loading');
       statusEl.textContent = 'Failed — try again';
-      showError('Upload failed. Please check your internet connection and try again. If the problem persists, contact the MIS team. Error: ' + err.message);
+      showError('Upload failed. Please check your connection and try again. If the problem persists, contact the MIS team. Error: ' + err.message);
     }
   }
 
   function toBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result.split(',')[1]);
+      reader.onload  = e => resolve(e.target.result.split(',')[1]);
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
@@ -622,9 +787,6 @@
   function clearError() {
     document.getElementById('errorBanner').classList.remove('show');
   }
-
-  // On load
-  checkTodaySubmission();
 </script>
 
 </body>
