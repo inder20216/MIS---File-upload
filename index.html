@@ -628,7 +628,14 @@
   }
 
   async function clearSession() {
-    // Session expires automatically after 15 min via sheet formula
+    if (!sessionToken) return;
+    try {
+      await fetch(SESSION_CLEAR, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: sessionUser, dept: sessionDept, token: sessionToken })
+      });
+    } catch(e) {}
   }
 
   // ============================================================
